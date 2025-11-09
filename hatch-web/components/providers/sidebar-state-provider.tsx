@@ -4,13 +4,10 @@ import {
   type ReactNode,
   createContext,
   useContext,
-  useEffect,
-  useState
+  useSyncExternalStore
 } from 'react';
 
-import { useCookie } from '@/hooks/use-cookie';
-
-const SIDEBAR_COOKIE_NAME = 'sidebar_state';
+import Cookies from 'js-cookie';
 
 interface SidebarStateContextType {
   defaultOpen: boolean;
@@ -20,18 +17,29 @@ const SidebarStateContext = createContext<SidebarStateContextType>({
   defaultOpen: true
 });
 
-export function SidebarStateProvider({ children }: { children: ReactNode }) {
-  const cookie = useCookie();
-  // Hydration mismatch 방지: 서버와 클라이언트 모두 처음에는 true 사용
-  const [defaultOpen, setDefaultOpen] = useState(true);
+// 쿠키 스토어 구독 (실제로는 구독 불필요)
+const subscribe = () => {
+  return () => {}; // noop - 쿠키는 외부에서 변경되지 않음
+};
 
-  useEffect(() => {
-    // 클라이언트에서 마운트 후 쿠키 읽기
-    const saved = cookie.get(SIDEBAR_COOKIE_NAME);
-    if (saved !== null) {
-      setDefaultOpen(saved === 'true');
-    }
-  }, [cookie]);
+// 클라이언트에서 쿠키 값 읽기
+const getSnapshot = () => {
+  const saved = Cookies.get('sidebar_state');
+  return saved === 'false' ? false : true;
+};
+
+// 서버에서는 항상 true 반환
+const getServerSnapshot = () => {
+  return true;
+};
+
+export function SidebarStateProvider({ children }: { children: ReactNode }) {
+  // useSyncExternalStore로 쿠키 동기화
+  const defaultOpen = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot
+  );
 
   return (
     <SidebarStateContext.Provider value={{ defaultOpen }}>
