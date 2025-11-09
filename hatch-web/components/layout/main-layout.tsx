@@ -1,7 +1,7 @@
 'use client';
 
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { useSidebarState } from '@/components/providers/sidebar-state-provider';
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 
 import { AppSidebar } from './app-sidebar';
 import { Header } from './header';
@@ -22,7 +22,7 @@ export function MainLayout({ children }: MainLayoutProps) {
         {/* Sidebar and Content area below header */}
         <div className="flex flex-1">
           <AppSidebar />
-          <SidebarInset className="container:px-8 flex-1">
+          <SidebarInset className="flex-1 px-8">
             <div className="container mx-auto max-w-screen-2xl">
               <div className="flex gap-4 py-6">
                 {/* Main Content */}

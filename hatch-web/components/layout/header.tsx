@@ -1,6 +1,5 @@
 'use client';
 
-import { SidebarTrigger } from '@/components/ui/sidebar';
 import Link from 'next/link';
 
 export function Header() {
@@ -8,7 +7,7 @@ export function Header() {
     <header className="border-b-border bg-background/95 sticky top-0 z-50 w-full border-b backdrop-blur">
       <div className="flex h-14 w-full items-center justify-between px-4">
         {/* Mobile Menu Trigger */}
-        <SidebarTrigger className="mr-2 [&>svg]:size-5!" />
+        {/* <SidebarTrigger className="mr-2 [&>svg]:size-5!" /> */}
 
         {/* Search Bar */}
         <div className="flex w-full flex-1 items-center justify-between space-x-2">
